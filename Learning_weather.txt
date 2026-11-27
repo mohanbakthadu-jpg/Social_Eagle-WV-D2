@@ -1,0 +1,199 @@
+1. An Agent Becomes More Powerful When It Gets Tools
+
+Before:
+
+Plain Text
+User → LLM → Answer
+
+The model could only answer from its training data.
+
+After:
+
+Plain Text
+User
+↓
+Agent
+↓
+Tool (DuckDuckGo Search)
+↓
+Live Information
+↓
+Final Answer
+
+Now the agent can access external information.
+
+Key Learning
+
+An LLM knows things. An Agent can do things.
+
+
+2. A Python Function Can Become a Tool
+
+This function:
+
+Python
+def search_weather_news(city: str) -> str:
+
+isn't just a function anymore.
+
+AutoGen treats it as a tool because it has:
+
+A name
+Type hints
+A docstring
+Key Learning
+
+In AutoGen, tools are simply Python functions.
+
+
+
+3. Type Hints Help the Agent Understand Inputs and Outputs
+
+Example:
+
+Python
+def search_weather_news(city: str) -> str:
+
+Here AutoGen understands:
+
+Plain Text
+Input = city (string)
+Output = string
+Key Learning
+
+Type hints act like a contract between the agent and the tool.
+
+
+
+
+4. The Docstring Is the Tool's Instruction Manual
+
+Example:
+
+Python
+"""
+Search the web for today's weather news and forecast updates.
+"""
+
+The agent reads this and thinks:
+
+"This tool is useful when the user asks about weather."
+
+If the docstring is poor:
+
+Python
+"""
+Search things.
+"""
+
+the agent may not understand when to use it.
+
+Key Learning
+
+The docstring tells the agent WHEN and WHY to call the tool.
+
+
+
+
+5. The Agent Decides on Its Own Whether to Use the Tool
+
+You never wrote:
+
+Python
+search_weather_news("Mumbai")
+
+directly.
+
+Instead:
+
+Python
+response = await weather_agent.run(...)
+
+The agent chose to call the tool automatically.
+
+Key Learning
+
+The agent reasons and decides whether a tool is needed.
+
+
+
+
+6. Reflection Improves Responses
+
+Without:
+
+Python
+reflect_on_tool_use=True
+
+you might get:
+
+Plain Text
+Mumbai Weather Update
+Partly Cloudy
+Chance of Rain
+
+Raw search output.
+
+With:
+
+Python
+reflect_on_tool_use=True
+ 
+
+you got:
+
+Plain Text
+Mumbai is experiencing partly cloudy skies today.
+Expect a high of 30°C with humidity levels around 75%.
+There's a slight chance of rainfall in the afternoon.
+Key Learning
+
+Reflection lets the agent analyze tool results before responding.
+
+
+
+
+7. We Learned About Environment Variables
+
+Instead of:
+
+Python
+api_key = "sk-xxxxx"
+
+we used:
+
+Python
+os.getenv("OPENAI_API_KEY")
+Key Learning
+
+Never hardcode secrets inside source code.
+
+Store them in:
+
+Plain Text
+.env
+
+files.
+
+
+
+
+8. We Learned Asynchronous Programming
+
+You encountered:
+
+Plain Text
+AttributeError: run_sync
+
+and fixed it using:
+
+Python
+await weather_agent.run(...)
+
+inside:
+
+Python
+asyncio.run(main())
+Key Learning
+
+Modern AutoGen versions use async programming.
